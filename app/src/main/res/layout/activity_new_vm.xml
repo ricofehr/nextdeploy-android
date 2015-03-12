@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="fr.publicis_modem.mvmc.NewVmActivity">
+
+    <!-- SubmitForm progress -->
+    <ProgressBar android:id="@+id/form_progress" style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp" android:visibility="gone" />
+
+    <ScrollView android:id="@+id/vm_form" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout android:id="@+id/create_vm_form" android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:id="@+id/projectField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                android:layout_marginTop="30dp"/>
+
+            <Spinner
+                android:id="@+id/flavorField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/projectField"
+                android:spinnerMode="dropdown"
+                android:layout_marginTop="30dp"/>
+
+            <Spinner
+                android:id="@+id/userField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/flavorField"
+                android:spinnerMode="dropdown"
+                android:layout_marginTop="30dp" />
+
+            <Spinner
+                android:id="@+id/branchField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/userField"
+                android:spinnerMode="dropdown"
+                android:layout_marginTop="30dp" />
+
+            <Spinner
+                android:id="@+id/commitField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/branchField"
+                android:spinnerMode="dropdown"
+                android:layout_marginTop="30dp" />
+
+            <Spinner
+                android:id="@+id/osField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/commitField"
+                android:spinnerMode="dropdown"
+                android:layout_marginTop="30dp" />
+
+            <Button
+                android:id="@+id/button_submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/osField"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="45dp"
+                android:onClick="submitForm"
+                android:text="@string/start_vm"
+                android:background="#fff"
+                style="?android:attr/borderlessButtonStyle"/>
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

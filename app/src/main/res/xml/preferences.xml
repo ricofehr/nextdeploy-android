@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:title="@string/pref_endpoint_title"
+        android:key="endpoint"
+        android:defaultValue="@string/pref_endpoint_default"
+        android:summary="@string/pref_endpoint_summary">
+    </EditTextPreference>
+
+    <EditTextPreference
+        android:title="@string/pref_username_title"
+        android:key="username"
+        android:defaultValue="@string/pref_username_default"
+        android:summary="@string/pref_username_summary">
+    </EditTextPreference>
+
+    <EditTextPreference
+        android:title="@string/pref_password_title"
+        android:key="password"
+        android:defaultValue="@string/pref_password_default"
+        android:summary="@string/pref_password_summary"
+        android:inputType="textPassword">
+    </EditTextPreference>
+</PreferenceScreen>
