@@ -40,32 +40,32 @@ public class ProjectActivity extends MvmcActivity {
             row = new TableRow(this);
 
             t1 = new TextView(this);
-            t2 = new TextView(this);
+            //t2 = new TextView(this);
             t3 = new TextView(this);
             t4 = new TextView(this);
 
             t1.setText("Name");
-            t2.setText("Enable");
+            //t2.setText("Enable");
             t3.setText("Login");
             t4.setText("Pass");
 
             t1.setTypeface(null, Typeface.BOLD);
-            t2.setTypeface(null, Typeface.BOLD);
+            //t2.setTypeface(null, Typeface.BOLD);
             t3.setTypeface(null, Typeface.BOLD);
             t4.setTypeface(null, Typeface.BOLD);
 
             t1.setTextSize(14);
-            t2.setTextSize(14);
+            //t2.setTextSize(14);
             t3.setTextSize(14);
             t4.setTextSize(14);
 
             t1.setPadding(20, 10, 0, 0);
-            t2.setPadding(20, 10, 0, 0);
+            //t2.setPadding(20, 10, 0, 0);
             t3.setPadding(20, 10, 0, 0);
             t4.setPadding(20, 10, 0, 20);
 
             row.addView(t1);
-            row.addView(t2);
+            //row.addView(t2);
             row.addView(t3);
             row.addView(t4);
 
@@ -86,32 +86,32 @@ public class ProjectActivity extends MvmcActivity {
                 row = new TableRow(this);
 
                 t1 = new TextView(this);
-                t2 = new TextView(this);
+                //t2 = new TextView(this);
                 t3 = new TextView(this);
                 t4 = new TextView(this);
 
                 t1.setText(name);
-                t2.setText(enabled);
+                //t2.setText(enabled);
                 t3.setText(login);
                 t4.setText(password);
 
                 t1.setTypeface(null, 1);
-                t2.setTypeface(null, 1);
+                //t2.setTypeface(null, 1);
                 t3.setTypeface(null, 1);
                 t4.setTypeface(null, 1);
 
                 t1.setTextSize(12);
-                t2.setTextSize(12);
+                //t2.setTextSize(12);
                 t3.setTextSize(12);
                 t4.setTextSize(12);
 
                 t1.setPadding(20, 10, 0, 0);
-                t2.setPadding(20, 10, 0, 0);
+                //t2.setPadding(20, 10, 0, 0);
                 t3.setPadding(20, 10, 0, 0);
                 t4.setPadding(20, 10, 0, 20);
 
                 row.addView(t1);
-                row.addView(t2);
+                //row.addView(t2);
                 row.addView(t3);
                 row.addView(t4);
 

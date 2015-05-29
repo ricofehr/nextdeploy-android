@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/flavorField"
                 android:spinnerMode="dropdown"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="30dp"/>
 
             <Spinner
                 android:id="@+id/branchField"
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/userField"
                 android:spinnerMode="dropdown"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="30dp"/>
 
             <Spinner
                 android:id="@+id/commitField"
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/branchField"
                 android:spinnerMode="dropdown"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="30dp"/>
 
             <Spinner
                 android:id="@+id/osField"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/commitField"
                 android:spinnerMode="dropdown"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="30dp"/>
 
             <Button
                 android:id="@+id/button_submit"
@@ -74,7 +74,8 @@
                 android:onClick="submitForm"
                 android:text="@string/start_vm"
                 android:background="#fff"
-                style="?android:attr/borderlessButtonStyle"/>
+                android:textStyle="bold"
+                style="?android:textAppearanceSmall"/>
         </RelativeLayout>
     </ScrollView>
 

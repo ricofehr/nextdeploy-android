@@ -83,7 +83,7 @@ public class NewVmActivity extends MvmcActivity {
         Spinner spinner = (Spinner) findViewById(R.id.projectField);
 
         // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, projects);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, projects);
 
         // Attaching data adapter to spinner
         spinner.setAdapter(dataAdapter);
@@ -105,7 +105,7 @@ public class NewVmActivity extends MvmcActivity {
             case "flavor":
                 spinner = (Spinner) findViewById(R.id.flavorField);
                 try {
-                    jsonObject = new JSONObject(response).getJSONObject(match);
+                    jsonObject = new JSONObject(response).getJSONObject("vmsize");
                     id = jsonObject.getString("id");
                     name = id + "# " + jsonObject.getString("title");
                 } catch (JSONException e) {
@@ -140,12 +140,12 @@ public class NewVmActivity extends MvmcActivity {
 
                     for(i=0; i<jsonArray.length(); i++) {
                         id = jsonArray.getString(i);
-                        items.add(id) ;
+                        items.add(id.substring(0,32)) ;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items) ;
+                dataAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, items) ;
                 break;
             case "systemimage":
                 spinner = (Spinner) findViewById(R.id.osField);
@@ -160,18 +160,20 @@ public class NewVmActivity extends MvmcActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items) ;
+                dataAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, items) ;
                 break;
         }
 
         if (dataAdapter == null) {
             dataAdapter = (ArrayAdapter<String>) spinner.getAdapter();
-            if (dataAdapter == null) {
-                items.add(name);
-                dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
-            } else {
-                dataAdapter.add(name);
+            if (dataAdapter != null) {
+                for(i=0 ; i<dataAdapter.getCount() ; i++) {
+                    items.add(dataAdapter.getItem(i));
+                }
             }
+
+            items.add(name);
+            dataAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, items);
         }
 
         // attaching data adapter to spinner
@@ -354,7 +356,7 @@ class ProjectOnItemSelectedListener extends Activity implements AdapterView.OnIt
                 jrow = projects.getJSONObject(i);
                 name = jrow.getString("name") ;
                 users = jrow.getJSONArray("users") ;
-                flavors = jrow.getJSONArray("flavors") ;
+                flavors = jrow.getJSONArray("vmsizes") ;
                 branchs = jrow.getJSONArray("branches") ;
                 os = jrow.getString("systemimagetype") ;
                 cur.setProjectId(jrow.getString("id")) ;

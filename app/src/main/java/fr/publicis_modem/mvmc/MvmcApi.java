@@ -172,7 +172,7 @@ public class MvmcApi {
 
         try {
             jsonParams.put("project_id", projectId);
-            jsonParams.put("flavor_id", flavorId);
+            jsonParams.put("vmsize_id", flavorId);
             jsonParams.put("user_id", userId);
             jsonParams.put("systemimage_id", osId);
             jsonParams.put("commit_id", commitId);
@@ -216,7 +216,7 @@ public class MvmcApi {
                 e.printStackTrace();
             }
 
-            aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/flavors/"+id), new SpinnerHandler(cur, "flavor"));
+            aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/vmsizes/"+id), new SpinnerHandler(cur, "flavor"));
         }
 
         for(i=0; i<users.length(); i++) {
@@ -259,7 +259,6 @@ public class MvmcApi {
             return false;
         }
 
-        Log.e("branche", getAbsoluteUrl(context, "/api/v1/branches/"+branch));
         aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/branches/"+branch), new SpinnerHandler(cur, "commit"));
 
         return true;
@@ -281,8 +280,6 @@ public class MvmcApi {
             Log.e("failure", "init false");
             return false;
         }
-
-        Log.e("getproject", getAbsoluteUrl(context, "/api/v1/projects/" + project_id)) ;
 
         responseHandler = new updateViewHandler(r_id, cur, "project");
         aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/projects/" + project_id), responseHandler);
@@ -370,7 +367,7 @@ public class MvmcApi {
      */
     private static String getAbsoluteUrl(Context context, String relativeUrl) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        return sharedPref.getString("endpoint", "") + relativeUrl;
+        return "http://" + sharedPref.getString("endpoint", "") + relativeUrl;
     }
 }
 
