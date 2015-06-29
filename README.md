@@ -1,7 +1,8 @@
 # mvmc-android
 
-It's the android app for mvmc project (see repository here: https://github.com/ricofehr/mvmc/). With this app, we can get details about our project, our vms and launch a vm creation.
+It's the android app for [mvmc project](https://github.com/ricofehr/mvmc/). With this app, we can get details about our project, our vms and launch a vm creation.
 
+The apk versions of mvmc-android are available [here](http://apk.mvmc.publicis-modem.fr/)
 
 ## Installation
 
