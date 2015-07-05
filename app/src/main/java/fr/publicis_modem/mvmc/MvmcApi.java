@@ -46,7 +46,7 @@ public class MvmcApi {
         aSyncClient.getHttpClient().getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, false);
         aSyncClient.getHttpClient().getParams().setParameter(ClientPNames.HANDLE_REDIRECTS, false);
         aSyncClient.getHttpClient().getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-        aSyncClient.setTimeout(30000);
+        aSyncClient.setTimeout(60000);
 
         return true ;
     }

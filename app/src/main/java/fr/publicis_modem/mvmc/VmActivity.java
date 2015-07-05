@@ -35,7 +35,10 @@ public class VmActivity extends MvmcActivity {
         int r_id, r_id2, r_id3 ;
         Random r = new Random();
 
-        Toast.makeText(getApplicationContext(), last_log, Toast.LENGTH_LONG).show();
+        if (last_log != null && last_log.length() != 0) {
+            Toast.makeText(getApplicationContext(), last_log, Toast.LENGTH_LONG).show();
+        }
+
         if (results != null) {
             row = new TableRow(this);
 

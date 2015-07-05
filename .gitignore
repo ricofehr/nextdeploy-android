@@ -5,6 +5,9 @@
 *.apk
 *.ap_
 
+# signed keys
+*.jks
+
 # Files for the Dalvik VM
 *.dex
 

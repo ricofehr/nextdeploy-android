@@ -35,7 +35,10 @@ public class UserActivity extends MvmcActivity {
         Random r = new Random();
         int r_id = 0 ;
 
-        Toast.makeText(getApplicationContext(), last_log, Toast.LENGTH_LONG).show();
+        if (last_log != null && last_log.length() != 0) {
+            Toast.makeText(getApplicationContext(), last_log, Toast.LENGTH_LONG).show();
+        }
+
         if (results != null) {
             row = new TableRow(this);
 
