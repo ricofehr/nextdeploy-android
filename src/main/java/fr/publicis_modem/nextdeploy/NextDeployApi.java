@@ -367,7 +367,7 @@ public class NextDeployApi {
      */
     private static String getAbsoluteUrl(Context context, String relativeUrl) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        return "http://" + sharedPref.getString("endpoint", "") + relativeUrl;
+        return "https://" + sharedPref.getString("endpoint", "") + relativeUrl;
     }
 }
 
