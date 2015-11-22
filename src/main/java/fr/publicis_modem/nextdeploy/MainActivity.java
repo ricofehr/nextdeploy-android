@@ -1,4 +1,4 @@
-package fr.publicis_modem.mvmc;
+package fr.publicis_modem.nextdeploy;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.widget.TextView;
  * Main activity, globla entries for the app
  * @author Eric Fehr (eric.fehr@publicis-modem.fr, @github: ricofehr)
  */
-public class MainActivity extends MvmcActivity {
+public class MainActivity extends NextDeployActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public class MainActivity extends MvmcActivity {
         setContentView(R.layout.activity_main);
 
         TextView t=(TextView)findViewById(R.id.textView1);
-        t.setText("Welcome " + MvmcApi.EMAIL);
+        t.setText("Welcome " + NextDeployApi.EMAIL);
     }
 
     /** Called when the user clicks the Vm button */
@@ -43,8 +43,8 @@ public class MainActivity extends MvmcActivity {
 
     /** Called when the user clicks the project button */
     public void logout(View view) {
-        MvmcApi.EMAIL = null ;
-        MvmcApi.API_TOKEN = null ;
+        NextDeployApi.EMAIL = null ;
+        NextDeployApi.API_TOKEN = null ;
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
     }
 }

@@ -1,4 +1,4 @@
-package fr.publicis_modem.mvmc;
+package fr.publicis_modem.nextdeploy;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,13 +14,13 @@ import org.json.JSONObject;
  * Project activity
  * @author Eric Fehr (eric.fehr@publicis-modem.fr, @github: ricofehr)
  */
-public class ProjectActivity extends MvmcActivity {
+public class ProjectActivity extends NextDeployActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
-        MvmcApi.listProjects(getApplicationContext(), this) ;
+        NextDeployApi.listProjects(getApplicationContext(), this) ;
     }
 
     /**

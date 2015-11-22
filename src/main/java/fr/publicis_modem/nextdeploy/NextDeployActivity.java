@@ -1,4 +1,4 @@
-package fr.publicis_modem.mvmc;
+package fr.publicis_modem.nextdeploy;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -12,7 +12,7 @@ import org.json.JSONArray;
  * Parent of other activities
  * @author Eric Fehr (eric.fehr@publicis-modem.fr, @github: ricofehr)
  */
-public abstract class MvmcActivity extends ActionBarActivity {
+public abstract class NextDeployActivity extends ActionBarActivity {
     protected void listHandler(JSONArray results, String last_log) {
 
     }

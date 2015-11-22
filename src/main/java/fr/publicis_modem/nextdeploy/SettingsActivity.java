@@ -1,4 +1,4 @@
-package fr.publicis_modem.mvmc;
+package fr.publicis_modem.nextdeploy;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package fr.publicis_modem.mvmc;
+package fr.publicis_modem.nextdeploy;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,13 +17,13 @@ import java.util.Random;
  * User activity
  * @author Eric Fehr (eric.fehr@publicis-modem.fr, @github: ricofehr)
  */
-public class UserActivity extends MvmcActivity {
+public class UserActivity extends NextDeployActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-        MvmcApi.listUsers(getApplicationContext(), this) ;
+        NextDeployApi.listUsers(getApplicationContext(), this) ;
     }
 
     public void listHandler(JSONArray results, String last_log) {
@@ -127,7 +127,7 @@ public class UserActivity extends MvmcActivity {
                 user_table.addView(row, new TableLayout.LayoutParams(
                         TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
 
-                MvmcApi.getGroup(getApplicationContext(), group, r_id, this) ;
+                NextDeployApi.getGroup(getApplicationContext(), group, r_id, this) ;
             }
         }
 

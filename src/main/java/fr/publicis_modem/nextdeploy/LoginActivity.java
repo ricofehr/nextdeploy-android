@@ -1,4 +1,4 @@
-package fr.publicis_modem.mvmc;
+package fr.publicis_modem.nextdeploy;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -48,7 +48,7 @@ import java.util.List;
  * A login screen that offers login via email/password.
  * @author Eric Fehr (eric.fehr@publicis-modem.fr, @github: ricofehr)
  */
-public class LoginActivity extends MvmcActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends NextDeployActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -162,7 +162,7 @@ public class LoginActivity extends MvmcActivity implements LoaderCallbacks<Curso
             focusView.requestFocus();
         } else {
             showProgress(true);
-            MvmcApi.signin(getApplicationContext(), email, password, this) ;
+            NextDeployApi.signin(getApplicationContext(), email, password, this) ;
         }
     }
 
@@ -173,7 +173,7 @@ public class LoginActivity extends MvmcActivity implements LoaderCallbacks<Curso
      */
     public void signinHandler(String lastlog) {
         Toast.makeText(getApplicationContext(), lastlog, Toast.LENGTH_LONG).show();
-        if (MvmcApi.API_TOKEN != null && MvmcApi.API_TOKEN != "") {
+        if (NextDeployApi.API_TOKEN != null && NextDeployApi.API_TOKEN != "") {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         } else {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
@@ -311,7 +311,7 @@ public class LoginActivity extends MvmcActivity implements LoaderCallbacks<Curso
         protected Boolean doInBackground(Void... params) {
             AsyncHttpClient aSyncClient;
             aSyncClient = new AsyncHttpClient();
-            aSyncClient.setUserAgent("Android Mvmc UA");
+            aSyncClient.setUserAgent("Android NextDeploy UA");
             aSyncClient.getHttpClient().getParams().setParameter("Content-Type", "application/json");
             aSyncClient.getHttpClient().getParams().setParameter("Accept", "application/json");
             aSyncClient.getHttpClient().getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, false);
@@ -329,7 +329,7 @@ public class LoginActivity extends MvmcActivity implements LoaderCallbacks<Curso
                 return false;
             }
 
-            aSyncClient.post(getApplicationContext(), "http://mvmc.publicis-modem.fr:3000/api/v1/users/sign_in", entity, "application/json", new AsyncHttpResponseHandler() {
+            aSyncClient.post(getApplicationContext(), "http://nextdeploy.publicis-modem.fr:3000/api/v1/users/sign_in", entity, "application/json", new AsyncHttpResponseHandler() {
                 // When the response returned by REST has Http response code '200'
                 @Override
                 public void onSuccess(String response) {

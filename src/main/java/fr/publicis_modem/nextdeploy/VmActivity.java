@@ -1,4 +1,4 @@
-package fr.publicis_modem.mvmc;
+package fr.publicis_modem.nextdeploy;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,13 +17,13 @@ import java.util.Random;
  * Vm activity
  * @author Eric Fehr (eric.fehr@publicis-modem.fr, @github: ricofehr)
  */
-public class VmActivity extends MvmcActivity {
+public class VmActivity extends NextDeployActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm);
-        MvmcApi.listVms(getApplicationContext(), this) ;
+        NextDeployApi.listVms(getApplicationContext(), this) ;
     }
 
     public void listHandler(JSONArray results, String last_log) {
@@ -152,9 +152,9 @@ public class VmActivity extends MvmcActivity {
                 vm_table.addView(row, new TableLayout.LayoutParams(
                         TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
 
-                MvmcApi.getProject(getApplicationContext(), project, r_id, this) ;
-                MvmcApi.getUser(getApplicationContext(), user, r_id2, this) ;
-                //MvmcApi.getSystem(getApplicationContext(), system, r_id3, this) ;
+                NextDeployApi.getProject(getApplicationContext(), project, r_id, this) ;
+                NextDeployApi.getUser(getApplicationContext(), user, r_id2, this) ;
+                //NextDeployApi.getSystem(getApplicationContext(), system, r_id3, this) ;
             }
         }
 

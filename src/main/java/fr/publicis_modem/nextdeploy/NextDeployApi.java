@@ -1,4 +1,4 @@
-package fr.publicis_modem.mvmc;
+package fr.publicis_modem.nextdeploy;
 
 import android.app.Activity;
 import android.content.Context;
@@ -18,12 +18,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Library for request with mvmc api
+ * Library for request with nextdeploy api
  * @author Eric Fehr (eric.fehr@publicis-modem.fr, @github: ricofehr)
  */
-public class MvmcApi {
+public class NextDeployApi {
     private static AsyncHttpClient aSyncClient;
-    private static String USER_AGENT = "Android Mvmc UA";
+    private static String USER_AGENT = "Android NextDeploy UA";
 
     public static String API_TOKEN = "";
     public static String EMAIL = "" ;
@@ -52,7 +52,7 @@ public class MvmcApi {
     }
 
     /**
-     * Execute the signin post request into mvmc platform
+     * Execute the signin post request into nextdeploy platform
      *
      * @param context   the android application context
      * @param email     the email who identify the user
@@ -91,7 +91,7 @@ public class MvmcApi {
      * @param cur   the android activity to forward the callback after processing
      * @return      false if exception occurs
      */
-    public static Boolean listProjects(Context context, MvmcActivity cur) {
+    public static Boolean listProjects(Context context, NextDeployActivity cur) {
         AsyncHttpResponseHandler responseHandler = null ;
 
         if(!init()) {
@@ -100,7 +100,7 @@ public class MvmcApi {
         }
 
         responseHandler = new listContentHandler(cur, "projects") ;
-        Log.e("mvmcapi", "get /api/v1/projects") ;
+        Log.e("nextdeployapi", "get /api/v1/projects") ;
         aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/projects"), responseHandler) ;
 
         return true ;
@@ -113,7 +113,7 @@ public class MvmcApi {
      * @param cur   the android activity to forward the callback after processing
      * @return      false if exception occurs
      */
-    public static Boolean listVms(Context context, MvmcActivity cur) {
+    public static Boolean listVms(Context context, NextDeployActivity cur) {
         AsyncHttpResponseHandler responseHandler = null;
 
         if(!init()) {
@@ -134,7 +134,7 @@ public class MvmcApi {
      * @param cur   the android activity to forward the callback after processing
      * @return      false if exception occurs
      */
-    public static Boolean listUsers(Context context, MvmcActivity cur) {
+    public static Boolean listUsers(Context context, NextDeployActivity cur) {
         AsyncHttpResponseHandler responseHandler = null ;
 
         if(!init()) {
@@ -273,7 +273,7 @@ public class MvmcApi {
      * @param cur   the android activity to forward the callback after processing
      * @return  false if exception occurs
      */
-    public static Boolean getProject(Context context, String project_id, int r_id, MvmcActivity cur) {
+    public static Boolean getProject(Context context, String project_id, int r_id, NextDeployActivity cur) {
         AsyncHttpResponseHandler responseHandler = null;
 
         if(!init()) {
@@ -296,7 +296,7 @@ public class MvmcApi {
      * @param cur   the android activity to forward the callback after processing
      * @return  false if exception occurs
      */
-    public static Boolean getUser(Context context, String user_id, int r_id, MvmcActivity cur) {
+    public static Boolean getUser(Context context, String user_id, int r_id, NextDeployActivity cur) {
         AsyncHttpResponseHandler responseHandler = null;
 
         if(!init()) {
@@ -321,7 +321,7 @@ public class MvmcApi {
      * @param cur   the android activity to forward the callback after processing
      * @return  false if exception occurs
      */
-    public static Boolean getSystem(Context context, String system_id, int r_id, MvmcActivity cur) {
+    public static Boolean getSystem(Context context, String system_id, int r_id, NextDeployActivity cur) {
         AsyncHttpResponseHandler responseHandler = null;
 
         if(!init()) {
@@ -344,7 +344,7 @@ public class MvmcApi {
      * @param cur   the android activity to forward the callback after processing
      * @return  false if exception occurs
      */
-    public static Boolean getGroup(Context context, String group_id, int r_id, MvmcActivity cur) {
+    public static Boolean getGroup(Context context, String group_id, int r_id, NextDeployActivity cur) {
         AsyncHttpResponseHandler responseHandler = null;
 
         if(!init()) {
@@ -376,7 +376,7 @@ public class MvmcApi {
  */
 class updateViewHandler extends AsyncHttpResponseHandler {
     private int r_id;
-    private MvmcActivity cur;
+    private NextDeployActivity cur;
     private String match;
 
     /**
@@ -385,7 +385,7 @@ class updateViewHandler extends AsyncHttpResponseHandler {
      * @param r_id  id of the label targetted on the android view
      * @param cur   android activity object for callback handler
      */
-    public updateViewHandler( int r_id, MvmcActivity cur, String match ) {
+    public updateViewHandler( int r_id, NextDeployActivity cur, String match ) {
         this.r_id = r_id;
         this.cur = cur;
         this.match = match;
@@ -394,7 +394,7 @@ class updateViewHandler extends AsyncHttpResponseHandler {
     /**
      * Success function for rest request
      *
-     * @param response  response from mvmc request
+     * @param response  response from nextdeploy request
      */
     public void onSuccess(String response) {
         String ret = "";
@@ -425,10 +425,10 @@ class updateViewHandler extends AsyncHttpResponseHandler {
 }
 
 /**
- * Handler for list datas from mvmc rest request
+ * Handler for list datas from nextdeploy rest request
  */
 class listContentHandler extends AsyncHttpResponseHandler {
-    private MvmcActivity cur;
+    private NextDeployActivity cur;
     private String match = "";
 
     /**
@@ -437,7 +437,7 @@ class listContentHandler extends AsyncHttpResponseHandler {
      * @param match  filter for the content
      * @param cur   android activity object for callback handler
      */
-    public listContentHandler( MvmcActivity cur, String match ) {
+    public listContentHandler( NextDeployActivity cur, String match ) {
         this.cur = cur;
         this.match = match;
     }
@@ -445,7 +445,7 @@ class listContentHandler extends AsyncHttpResponseHandler {
     /**
      * Success function for rest request
      *
-     * @param response  response from mvmc request
+     * @param response  response from nextdeploy request
      */
     public void onSuccess(String response) {
         Log.e("onSuccess", response);
@@ -492,7 +492,7 @@ class listContentHandler extends AsyncHttpResponseHandler {
 }
 
 /**
- * Handler for flavor datas from mvmc rest request
+ * Handler for flavor datas from nextdeploy rest request
  */
 class SpinnerHandler extends AsyncHttpResponseHandler {
     private NewVmActivity cur;
@@ -511,7 +511,7 @@ class SpinnerHandler extends AsyncHttpResponseHandler {
     /**
      * Success function for rest request
      *
-     * @param response  response from mvmc request
+     * @param response  response from nextdeploy request
      */
     public void onSuccess(String response) {
         cur.spinnerHandler(response, match);
@@ -564,8 +564,8 @@ class LoginHandler extends AsyncHttpResponseHandler {
                 return;
             }
             else {
-                MvmcApi.EMAIL = myResponse.getString("email");
-                MvmcApi.API_TOKEN = myResponse.getString("authentication_token");
+                NextDeployApi.EMAIL = myResponse.getString("email");
+                NextDeployApi.API_TOKEN = myResponse.getString("authentication_token");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -577,8 +577,8 @@ class LoginHandler extends AsyncHttpResponseHandler {
     public void onFailure(int statusCode, Throwable error, String content) {
         Log.e("onFailure", error.getMessage());
         String lastLog = "";
-        MvmcApi.API_TOKEN = null;
-        MvmcApi.EMAIL = null;
+        NextDeployApi.API_TOKEN = null;
+        NextDeployApi.EMAIL = null;
         // When Http response code is '404'
         if(statusCode == 404){
             lastLog = "Requested resource not found";

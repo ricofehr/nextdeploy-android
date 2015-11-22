@@ -1,4 +1,4 @@
-package fr.publicis_modem.mvmc;
+package fr.publicis_modem.nextdeploy;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -26,7 +26,7 @@ import java.util.List;
  * Activity who display a vm creation form
  * @author Eric Fehr (eric.fehr@publicis-modem.fr, @github: ricofehr)
  */
-public class NewVmActivity extends MvmcActivity {
+public class NewVmActivity extends NextDeployActivity {
     private String projectId = null ;
     private String flavorId = null ;
     private String commitId = null ;
@@ -45,7 +45,7 @@ public class NewVmActivity extends MvmcActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_vm);
-        MvmcApi.listProjects(getApplicationContext(), this) ;
+        NextDeployApi.listProjects(getApplicationContext(), this) ;
     }
 
     public void listHandler(JSONArray results, String last_log) {
@@ -231,7 +231,7 @@ public class NewVmActivity extends MvmcActivity {
         osId = osId.replaceAll("[^0-9].*$", "");
 
         showProgress(true);
-        MvmcApi.createVm(getApplicationContext(), this, projectId, flavorId, userId, commitId, osId) ;
+        NextDeployApi.createVm(getApplicationContext(), this, projectId, flavorId, userId, commitId, osId) ;
     }
 
     /**
@@ -377,7 +377,7 @@ class ProjectOnItemSelectedListener extends Activity implements AdapterView.OnIt
         }
 
         if (users != null) {
-            MvmcApi.newVmHandler(cur.getApplicationContext(), cur, flavors, users, branchs, os);
+            NextDeployApi.newVmHandler(cur.getApplicationContext(), cur, flavors, users, branchs, os);
         }
     }
 
@@ -412,7 +412,7 @@ class BranchOnItemSelectedListener extends Activity implements AdapterView.OnIte
         spinner = (Spinner) cur.findViewById(R.id.branchField);
         branchSelected = spinner.getSelectedItem().toString() ;
 
-        MvmcApi.newVmHandler2(cur.getApplicationContext(), cur, branchSelected);
+        NextDeployApi.newVmHandler2(cur.getApplicationContext(), cur, branchSelected);
     }
 
     @Override

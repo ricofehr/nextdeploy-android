@@ -1,8 +1,8 @@
-# mvmc-android
+# nextdeploy-android
 
-It's the android app for [mvmc project](https://github.com/ricofehr/mvmc/). With this app, we can get details about our project, our vms and launch a vm creation.
+It's the android app for [nextdeploy project](https://github.com/ricofehr/nextdeploy/). With this app, we can get details about our project, our vms and launch a vm creation.
 
-The apk versions of mvmc-android are available [here](http://apk.mvmc.services-pm.fr:8383/)
+The apk versions of nextdeploy-android are available [here](http://apk.nextdeploy.services-pm.fr:8383/)
 
 ## Installation
 
