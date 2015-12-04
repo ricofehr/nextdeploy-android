@@ -146,6 +146,7 @@ public class NewVmActivity extends NextDeployActivity {
                     e.printStackTrace();
                 }
                 dataAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, items) ;
+                spinner.setVisibility(View.GONE);
                 break;
             case "systemimage":
                 spinner = (Spinner) findViewById(R.id.osField);

@@ -7,9 +7,8 @@
     </style>
 
     <style name="SpinnerTextViewItem" parent="@android:style/Widget.TextView">
-        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:typeface">serif</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

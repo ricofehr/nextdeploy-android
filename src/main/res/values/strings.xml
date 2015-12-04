@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">nextdeploy</string>
-    <string name="textview">Manage publicis-mode Virtual Machines !</string>
-    <string name="hint">NextDeploy, Eric Fehr, @publicis-modem, 2014</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="app_name">NextDeploy</string>
+    <string name="textview">Manage NextDeploy Virtual Machines !</string>
+    <string name="hint">NextDeploy, Eric Fehr, @publicis-nurun, 2014</string>
+    <string name="title_activity_main">NextDeploy</string>
     <string name="hello_world">Hello world!</string>
     <string name="logout">Logout</string>
     <string name="title_activity_welcome">Welcome </string>
@@ -14,10 +14,10 @@
     <string name="vmnew">New Vm</string>
     <string name="projectlist">Projects</string>
     <string name="userlist">Users</string>
-    <string name="title_activity_vm">VmActivity</string>
-    <string name="title_activity_project">ProjectActivity</string>
-    <string name="title_activity_user">UserActivity</string>
-    <string name="title_activity_new_vm">NewVmActivity</string>
+    <string name="title_activity_vm">Vms List</string>
+    <string name="title_activity_project">Projects List</string>
+    <string name="title_activity_user">Users List</string>
+    <string name="title_activity_new_vm">Create a new VM</string>
     <string name="select_project">Please select a Project</string>
     <string name="select_flavor">Please select a Flavor</string>
     <string name="select_user">Please select an User</string>
