@@ -1,4 +1,4 @@
-package fr.publicis_modem.nextdeploy;
+package io.nextdeploy;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -46,14 +46,9 @@ import java.util.List;
 
 /**
  * A login screen that offers login via email/password.
- * @author Eric Fehr (eric.fehr@publicis-modem.fr, @github: ricofehr)
+ * @author Eric Fehr (ricofehr@nextdeploy.io, @github: ricofehr)
  */
 public class LoginActivity extends NextDeployActivity implements LoaderCallbacks<Cursor> {
-
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -122,9 +117,6 @@ public class LoginActivity extends NextDeployActivity implements LoaderCallbacks
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mEmailView.setError(null);
@@ -288,119 +280,6 @@ public class LoginActivity extends NextDeployActivity implements LoaderCallbacks
         mEmailView.setAdapter(adapter);
     }
 
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        /**
-         * Do the job
-         * @param params
-         * @return
-         */
-        protected Boolean doInBackground(Void... params) {
-            AsyncHttpClient aSyncClient;
-            aSyncClient = new AsyncHttpClient();
-            aSyncClient.setUserAgent("Android NextDeploy UA");
-            aSyncClient.getHttpClient().getParams().setParameter("Content-Type", "application/json");
-            aSyncClient.getHttpClient().getParams().setParameter("Accept", "application/json");
-            aSyncClient.getHttpClient().getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, false);
-            aSyncClient.getHttpClient().getParams().setParameter(ClientPNames.HANDLE_REDIRECTS, false);
-            aSyncClient.getHttpClient().getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-
-            JSONObject jsonParams = new JSONObject();
-            StringEntity entity ;
-
-            try {
-                jsonParams.put("email", mEmail);
-                jsonParams.put("password", mPassword);
-                entity = new StringEntity(jsonParams.toString());
-            } catch (Exception e) {
-                return false;
-            }
-
-            aSyncClient.post(getApplicationContext(), "http://nextdeploy.publicis-modem.fr:3000/api/v1/users/sign_in", entity, "application/json", new AsyncHttpResponseHandler() {
-                // When the response returned by REST has Http response code '200'
-                @Override
-                public void onSuccess(String response) {
-                    // Hide Progress Dialog
-                    //prgDialog.hide();
-                    try {
-                        // JSON Object
-                        JSONObject obj = new JSONObject(response);
-                        // When the JSON response has status boolean value assigned with true
-                        Log.e("onSuccess", response.toString()) ;
-                        if(obj.getBoolean("status")){
-                            Toast.makeText(getApplicationContext(), "You are successfully logged in!", Toast.LENGTH_LONG).show();
-                            // Navigate to Home screen
-                            //navigatetoHomeActivity();
-                        }
-                        // Else display error message
-                        else{
-                            //errorMsg.setText(obj.getString("error_msg"));
-                            Toast.makeText(getApplicationContext(), obj.getString("error_msg"), Toast.LENGTH_LONG).show();
-                        }
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        Toast.makeText(getApplicationContext(), "Error Occured [Server's JSON response might be invalid]!", Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-
-                    }
-                }
-                // When the response returned by REST has Http response code other than '200'
-                @Override
-                public void onFailure(int statusCode, Throwable error,
-                                      String content) {
-                    // Hide Progress Dialog
-                    //prgDialog.hide();
-                    Log.e("onFailure", content) ;
-                    // When Http response code is '404'
-                    if(statusCode == 404){
-                        Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
-                    }
-                    // When Http response code is '500'
-                    else if(statusCode == 500){
-                        Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
-                    }
-                    // When Http response code other than 404, 500
-                    else{
-                        Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
 }
 
 

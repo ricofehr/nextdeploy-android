@@ -1,4 +1,4 @@
-package fr.publicis_modem.nextdeploy;
+package io.nextdeploy;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -10,7 +10,7 @@ import org.json.JSONArray;
 
 /**
  * Parent of other activities
- * @author Eric Fehr (eric.fehr@publicis-modem.fr, @github: ricofehr)
+ * @author Eric Fehr (ricofehr@nextdeploy.io, @github: ricofehr)
  */
 public abstract class NextDeployActivity extends ActionBarActivity {
     protected void listHandler(JSONArray results, String last_log) {

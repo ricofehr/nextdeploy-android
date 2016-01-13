@@ -3,7 +3,7 @@
 
     <string name="app_name">NextDeploy</string>
     <string name="textview">Manage NextDeploy Virtual Machines !</string>
-    <string name="hint">NextDeploy, Eric Fehr, @publicis-nurun, 2014</string>
+    <string name="hint">2016 Eric Fehr, NextDeploy</string>
     <string name="title_activity_main">NextDeploy</string>
     <string name="hello_world">Hello world!</string>
     <string name="logout">Logout</string>

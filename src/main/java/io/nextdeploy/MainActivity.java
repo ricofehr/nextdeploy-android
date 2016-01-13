@@ -1,4 +1,4 @@
-package fr.publicis_modem.nextdeploy;
+package io.nextdeploy;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 /**
  * Main activity, globla entries for the app
- * @author Eric Fehr (eric.fehr@publicis-modem.fr, @github: ricofehr)
+ * @author Eric Fehr (ricofehr@nextdeploy.io, @github: ricofehr)
  */
 public class MainActivity extends NextDeployActivity {
 

@@ -1,4 +1,4 @@
-package fr.publicis_modem.nextdeploy;
+package io.nextdeploy;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 /**
  * Project activity
- * @author Eric Fehr (eric.fehr@publicis-modem.fr, @github: ricofehr)
+ * @author Eric Fehr (ricofehr@nextdeploy.io, @github: ricofehr)
  */
 public class ProjectActivity extends NextDeployActivity {
 

@@ -1,4 +1,4 @@
-package fr.publicis_modem.nextdeploy;
+package io.nextdeploy;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 /**
  * Library for request with nextdeploy api
- * @author Eric Fehr (eric.fehr@publicis-modem.fr, @github: ricofehr)
+ * @author Eric Fehr (ricofehr@nextdeploy.io, @github: ricofehr)
  */
 public class NextDeployApi {
     private static AsyncHttpClient aSyncClient;
