@@ -2,14 +2,14 @@
 
 It's the android app for [nextdeploy project](https://github.com/ricofehr/nextdeploy/). With this app, we can get details about our project, our vms and launch a vm creation.
 
-The apk versions of nextdeploy-android are available [here](http://apk.nextdeploy.services-pm.fr:8383/)
+The apk versions of nextdeploy-android are available [here](http://apk.nextdeploy.io/)
 
 ## Installation
 
 For test or develop on the app, please clone the repo and import the project into android studio.
 
 
-## TODOS
+## TODO
 
 * Profile editing
 * Popup who lists uris and git repositories
