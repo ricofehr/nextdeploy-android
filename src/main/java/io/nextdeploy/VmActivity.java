@@ -3,6 +3,8 @@ package io.nextdeploy;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -35,9 +37,9 @@ public class VmActivity extends NextDeployActivity {
         TableLayout vm_table=(TableLayout)findViewById(R.id.vm_table);
         TableRow row;
         TextView t1, t2, t3, t4, t5, t6;
-        JSONObject jrow = null ;
-        String commit = "", project = "", user = "", system = "", ip = "", date = "" ;
-        int r_id, r_id2, r_id3 ;
+        JSONObject jrow = null;
+        String commit = "", project = "", user = "", system = "", ip = "", date = "", name = "";
+        int r_id, r_id2, r_id3;
         Random r = new Random();
 
         if (last_log != null && last_log.length() != 0) {
@@ -91,10 +93,11 @@ public class VmActivity extends NextDeployActivity {
                     jrow = results.getJSONObject(i);
                     Log.e("log listvm", jrow.toString());
                     commit = jrow.getString("commit").replaceAll("^.*-", "").substring(0,5) ;
-                    project = jrow.getString("project") ;
-                    user = jrow.getString("user") ;
-                    system = jrow.getString("systemimage") ;
-                    ip = jrow.getString("floating_ip") ;
+                    project = jrow.getString("project");
+                    user = jrow.getString("user");
+                    name = jrow.getString("name");
+                    system = jrow.getString("systemimage");
+                    ip = jrow.getString("floating_ip");
                 } catch (Exception e) {
                     ;
                 }
@@ -124,7 +127,9 @@ public class VmActivity extends NextDeployActivity {
                 //t1.setTextColor(getResources().getColor(R.color.yellow));
                 //t2.setTextColor(getResources().getColor(R.color.dark_red));
 
-                t1.setText(commit);
+                t1.setMovementMethod(LinkMovementMethod.getInstance());
+                t1.setClickable(true);
+                t1.setText(Html.fromHtml("<a href=\"http://m." + name + "\">" + commit + "</a>"));
                 t2.setText(project);
                 t3.setText(user);
                 //t4.setText(system);

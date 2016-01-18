@@ -60,7 +60,8 @@
         <activity
             android:name=".UserActivity"
             android:parentActivityName="io.nextdeploy.MainActivity"
-            android:label="@string/title_activity_user" >
+            android:label="@string/title_activity_user"
+            android:screenOrientation="landscape">
         </activity>
         <activity
             android:name=".NewVmActivity"
