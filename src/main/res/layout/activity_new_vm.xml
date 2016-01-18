@@ -9,7 +9,8 @@
     <!-- SubmitForm progress -->
     <ProgressBar android:id="@+id/form_progress" style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp" android:visibility="gone" />
+        android:layout_marginBottom="8dp" android:visibility="gone"
+        android:layout_centerHorizontal="true" android:layout_centerVertical="true" android:layout_centerInParent="true" />
 
     <ScrollView android:id="@+id/vm_form" android:layout_width="match_parent"
         android:layout_height="match_parent">

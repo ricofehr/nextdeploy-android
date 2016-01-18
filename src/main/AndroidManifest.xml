@@ -48,23 +48,28 @@
         <activity
             android:name=".VmActivity"
             android:label="@string/title_activity_vm"
+            android:parentActivityName="io.nextdeploy.MainActivity"
             android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name=".ProjectActivity"
             android:label="@string/title_activity_project"
+            android:parentActivityName="io.nextdeploy.MainActivity"
             android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name=".UserActivity"
+            android:parentActivityName="io.nextdeploy.MainActivity"
             android:label="@string/title_activity_user" >
         </activity>
         <activity
             android:name=".NewVmActivity"
+            android:parentActivityName="io.nextdeploy.MainActivity"
             android:label="@string/title_activity_new_vm" >
         </activity>
         <activity
             android:name=".SettingsActivity"
+            android:parentActivityName="io.nextdeploy.LoginActivity"
             android:label="@string/title_activity_settings" >
         </activity>
     </application>

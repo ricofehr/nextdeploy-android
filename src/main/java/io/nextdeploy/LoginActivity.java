@@ -66,7 +66,18 @@ public class LoginActivity extends NextDeployActivity implements LoaderCallbacks
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        fillForm();
+    }
 
+    @Override
+    protected void onResume()
+    {
+        // TODO Auto-generated method stub
+        super.onResume();
+        fillForm();
+    }
+
+    public void fillForm() {
         /** ensure that settings is on default value on the first loading */
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 

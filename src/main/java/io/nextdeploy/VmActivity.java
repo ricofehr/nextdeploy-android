@@ -2,6 +2,7 @@ package io.nextdeploy;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -24,6 +25,10 @@ public class VmActivity extends NextDeployActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm);
         NextDeployApi.listVms(getApplicationContext(), this) ;
+
+        // Enable the Up button
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     public void listHandler(JSONArray results, String last_log) {
