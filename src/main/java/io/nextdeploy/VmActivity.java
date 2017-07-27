@@ -17,33 +17,44 @@ import org.json.JSONObject;
 import java.util.Random;
 
 /**
- * Vm activity
- * @author Eric Fehr (ricofehr@nextdeploy.io, @github: ricofehr)
+ *  Vm activity
+ *  @author Eric Fehr (ricofehr@nextdeploy.io, github: ricofehr)
  */
 public class VmActivity extends NextDeployActivity {
 
+    /**
+     *  Activity creation trigger
+     *  @param savedInstanceState
+     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vm);
-        NextDeployApi.listVms(getApplicationContext(), this) ;
+        NextDeployApi.listVms(getApplicationContext(), this);
 
         // Enable the Up button
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    public void listHandler(JSONArray results, String last_log) {
-        TableLayout vm_table=(TableLayout)findViewById(R.id.vm_table);
+    /**
+     *  Format vms array for displaying into the android app
+     *  @param results  Json array
+     *  @param lastLog
+     */
+    public void listHandler(JSONArray results, String lastLog)
+    {
+        TableLayout vmTable=(TableLayout)findViewById(R.id.vm_table);
         TableRow row;
-        TextView t1, t2, t3, t4, t5, t6;
+        TextView t1, t2, t3;
         JSONObject jrow = null;
-        String commit = "", project = "", user = "", system = "", ip = "", date = "", name = "";
-        int r_id, r_id2, r_id3;
+        String project = "", user = "", name = "", topic = "", scheme = "http", htlogin = "", htpassword = "";
+        int rId, rId2;
         Random r = new Random();
 
-        if (last_log != null && last_log.length() != 0) {
-            Toast.makeText(getApplicationContext(), last_log, Toast.LENGTH_LONG).show();
+        if (lastLog != null && lastLog.length() != 0) {
+            Toast.makeText(getApplicationContext(), lastLog, Toast.LENGTH_LONG).show();
         }
 
         if (results != null) {
@@ -52,52 +63,44 @@ public class VmActivity extends NextDeployActivity {
             t1 = new TextView(this);
             t2 = new TextView(this);
             t3 = new TextView(this);
-            //t4 = new TextView(this);
-            //t5 = new TextView(this);
 
-            t1.setText("Commit");
+            t1.setText("Topic");
             t2.setText("Project");
             t3.setText("User");
-            //t4.setText("System");
-            //t5.setText("Ip");
 
             t1.setTypeface(null, Typeface.BOLD);
             t2.setTypeface(null, Typeface.BOLD);
             t3.setTypeface(null, Typeface.BOLD);
-            //t4.setTypeface(null, Typeface.BOLD);
-            //t5.setTypeface(null, Typeface.BOLD);
 
             t1.setTextSize(14);
             t2.setTextSize(14);
             t3.setTextSize(14);
-            //t4.setTextSize(14);
-            //t5.setTextSize(14);
 
             t1.setPadding(20, 10, 0, 0);
             t2.setPadding(20, 10, 0, 0);
             t3.setPadding(20, 10, 0, 0);
-            //t4.setPadding(20, 10, 0, 0);
-            //t5.setPadding(20, 10, 0, 10);
 
             row.addView(t1);
             row.addView(t2);
             row.addView(t3);
-            //row.addView(t4);
-            //row.addView(t5);
 
-            vm_table.addView(row, new TableLayout.LayoutParams(
+            vmTable.addView(row, new TableLayout.LayoutParams(
                     TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
 
             for (int i = 0; i < results.length(); i++) {
                 try {
                     jrow = results.getJSONObject(i);
+                    // Exclude jenkins vms
+                    if (jrow.getBoolean("is_jenkins")) {
+                        continue;
+                    }
                     Log.e("log listvm", jrow.toString());
-                    commit = jrow.getString("commit").replaceAll("^.*-", "").substring(0,5) ;
                     project = jrow.getString("project");
                     user = jrow.getString("user");
                     name = jrow.getString("name");
-                    system = jrow.getString("systemimage");
-                    ip = jrow.getString("floating_ip");
+                    topic = jrow.getString("topic");
+                    htlogin = jrow.getString("htlogin");
+                    htpassword = jrow.getString("htpassword");
                 } catch (Exception e) {
                     ;
                 }
@@ -107,67 +110,45 @@ public class VmActivity extends NextDeployActivity {
                 t1 = new TextView(this);
 
                 t2 = new TextView(this);
-                //r_id = View.generateViewId();
-                r_id = r.nextInt(200000) ;
-                t2.setId(r_id);
+                rId = r.nextInt(200000);
+                t2.setId(rId);
 
                 t3 = new TextView(this);
-                //r_id2 = View.generateViewId();
-                r_id2 = r.nextInt(200000) ;
-                t3.setId(r_id2);
-
-                /*
-                t4 = new TextView(this);
-                //r_id3 = View.generateViewId();
-                r_id3 = r.nextInt(200000) ;
-                t4.setId(r_id3);
-
-                t5 = new TextView(this);
-                */
-                //t1.setTextColor(getResources().getColor(R.color.yellow));
-                //t2.setTextColor(getResources().getColor(R.color.dark_red));
+                rId2 = r.nextInt(200000);
+                t3.setId(rId2);
 
                 t1.setMovementMethod(LinkMovementMethod.getInstance());
                 t1.setClickable(true);
-                t1.setText(Html.fromHtml("<a href=\"http://m." + name + "\">" + commit + "</a>"));
+                t1.setText(Html.fromHtml("<a href=\"" + scheme + "://" + htlogin + ":" +
+                                         htpassword + "@" + name + "\">" + topic + "</a>"));
                 t2.setText(project);
                 t3.setText(user);
-                //t4.setText(system);
-                //t5.setText(ip);
 
                 t1.setTypeface(null, 1);
                 t2.setTypeface(null, 1);
                 t3.setTypeface(null, 1);
-                //t4.setTypeface(null, 1);
-                //t5.setTypeface(null, 1);
 
                 t1.setTextSize(10);
                 t2.setTextSize(10);
                 t3.setTextSize(10);
-                //t4.setTextSize(10);
-                //t5.setTextSize(10);
 
                 t1.setPadding(20, 10, 0, 0);
                 t2.setPadding(20, 10, 0, 0);
                 t3.setPadding(20, 10, 0, 0);
-                //t4.setPadding(20, 10, 0, 0);
-                //t5.setPadding(20, 10, 0, 10);
 
                 row.addView(t1);
                 row.addView(t2);
                 row.addView(t3);
-                //row.addView(t4);
-                //row.addView(t5);
 
-                vm_table.addView(row, new TableLayout.LayoutParams(
-                        TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT));
+                vmTable.addView(row,
+                                new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,
+                                                             TableLayout.LayoutParams.WRAP_CONTENT));
 
-                NextDeployApi.getProject(getApplicationContext(), project, r_id, this) ;
-                NextDeployApi.getUser(getApplicationContext(), user, r_id2, this) ;
-                //NextDeployApi.getSystem(getApplicationContext(), system, r_id3, this) ;
+                NextDeployApi.getProject(getApplicationContext(), project, rId, this);
+                NextDeployApi.getUser(getApplicationContext(), user, rId2, this);
             }
         }
 
-        return ;
+        return;
     }
 }

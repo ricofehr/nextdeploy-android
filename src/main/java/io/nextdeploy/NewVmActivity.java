@@ -24,26 +24,35 @@ import java.util.List;
 
 
 /**
- * Activity who display a vm creation form
- * @author Eric Fehr (ricofehr@nextdeploy.io, @github: ricofehr)
+ *  Activity who display a vm creation form
+ *  @author Eric Fehr (ricofehr@nextdeploy.io, github: ricofehr)
  */
 public class NewVmActivity extends NextDeployActivity {
-    private String projectId = null ;
-    private String flavorId = null ;
-    private String commitId = null ;
-    private String osId = null ;
-    private String userId = null ;
+
+    private String projectId = null;
+    private String flavorId = null;
+    private String commitId = null;
+    private String osId = null;
+    private String userId = null;
 
     private View mVmFormView;
     private View mProgressView;
 
-    //change projectid value
-    public void setProjectId(String id) {
+    /**
+     *  Change projectid value
+     *  @param id
+     */
+    public void setProjectId(String id)
+    {
         projectId = id;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    /**
+     *  Trigger on activity creation
+     *  @param savedInstanceState
+     */
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_vm);
         NextDeployApi.listProjects(getApplicationContext(), this);
@@ -53,17 +62,23 @@ public class NewVmActivity extends NextDeployActivity {
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    public void listHandler(JSONArray results, String last_log) {
+    /**
+     *  Init the project lists in the form
+     *  @param results
+     *  @param lastLog
+     */
+    public void listHandler(JSONArray results, String lastLog)
+    {
         List<String> projects = new ArrayList<String>();
-        String name = "", enabled = "" ;
-        JSONObject jrow = null ;
+        String name = "", enabled = "";
+        JSONObject jrow;
 
         //reset all form values
-        projectId = null ;
-        flavorId = null ;
-        userId = null ;
-        commitId = null ;
-        osId = null ;
+        projectId = null;
+        flavorId = null;
+        userId = null;
+        commitId = null;
+        osId = null;
 
         projects.add("Please select a Project") ;
 
@@ -71,17 +86,17 @@ public class NewVmActivity extends NextDeployActivity {
         for (int i = 0; i < results.length(); i++) {
             try {
                 jrow = results.getJSONObject(i);
-                name = jrow.getString("name") ;
-                enabled = jrow.getString("enabled") ;
+                name = jrow.getString("name");
+                enabled = jrow.getString("enabled");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             if (enabled.compareToIgnoreCase("false") == 0 || enabled.compareToIgnoreCase("0") == 0) {
-                continue ;
+                continue;
             }
 
-            projects.add(name) ;
+            projects.add(name);
         }
 
         // Spinner element
@@ -93,18 +108,24 @@ public class NewVmActivity extends NextDeployActivity {
         // Attaching data adapter to spinner
         spinner.setAdapter(dataAdapter);
 
-        spinner.setOnItemSelectedListener(new ProjectOnItemSelectedListener(this, results)) ;
+        spinner.setOnItemSelectedListener(new ProjectOnItemSelectedListener(this, results));
     }
 
-    public void spinnerHandler(String response, String match) {
-        int i = 0 ;
-        String name = "" ;
-        String id = "" ;
-        Spinner spinner = null ;
-        ArrayAdapter<String> dataAdapter = null ;
-        List<String> items = new ArrayList<String>() ;
-        JSONObject jsonObject = null ;
-        JSONArray jsonArray = null ;
+    /**
+     *  Init list into the form for vmsizes, users, branches, commits, or systemimages
+     *  @param response
+     *  @param match
+     */
+    public void spinnerHandler(String response, String match)
+    {
+        int i = 0;
+        String name = "";
+        String id = "";
+        Spinner spinner = null;
+        ArrayAdapter<String> dataAdapter = null;
+        List<String> items = new ArrayList<String>();
+        JSONObject jsonObject;
+        JSONArray jsonArray;
 
         switch (match) {
             case "flavor":
@@ -143,7 +164,7 @@ public class NewVmActivity extends NextDeployActivity {
                 try {
                     jsonArray = new JSONObject(response).getJSONObject("branche").getJSONArray("commits");
 
-                    for(i=0; i<jsonArray.length(); i++) {
+                    for(i = 0; i < jsonArray.length(); i++) {
                         id = jsonArray.getString(i);
                         items.add(id.substring(0,32)) ;
                     }
@@ -156,17 +177,12 @@ public class NewVmActivity extends NextDeployActivity {
             case "systemimage":
                 spinner = (Spinner) findViewById(R.id.osField);
                 try {
-                    jsonArray = new JSONObject(response).getJSONArray("systemimages");
-                    for(i=0; i<jsonArray.length(); i++) {
-                        jsonObject = jsonArray.getJSONObject(i) ;
-                        id = jsonObject.getString("id");
-                        name = id + "# " + jsonObject.getString("name");
-                        items.add(name) ;
-                    }
+                    jsonObject = new JSONObject(response).getJSONObject(match);
+                    id = jsonObject.getString("id");
+                    name = id + "# " + jsonObject.getString("name");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                dataAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, items) ;
                 break;
         }
 
@@ -188,9 +204,10 @@ public class NewVmActivity extends NextDeployActivity {
     }
 
     /**
-     * Execute submit of the form for create new vm
+     *  Execute submit of the form for create new vm
      */
-    public void submitForm(View view) {
+    public void submitForm(View view)
+    {
         flavorId = null ;
         userId = null ;
         commitId = null ;
@@ -241,10 +258,11 @@ public class NewVmActivity extends NextDeployActivity {
     }
 
     /**
-     * Shows the progress UI and hides the login form.
+     *  Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public void showProgress(final boolean show) {
+    public void showProgress(final boolean show)
+    {
         mVmFormView = findViewById(R.id.vm_form);
         mProgressView = findViewById(R.id.form_progress);
 
@@ -280,11 +298,12 @@ public class NewVmActivity extends NextDeployActivity {
     }
 
     /**
-     * Handler after post requesto to create new vm
+     *  Handler after post requesto to create new vm
      *
-     * @param success is true if rest request returned 200
+     *  @param success is true if rest request returned 200
      */
-    public void createVmHandler(boolean success) {
+    public void createVmHandler(boolean success)
+    {
         showProgress(false);
         if (success) {
             startActivity(new Intent(getApplicationContext(), VmActivity.class));
@@ -295,9 +314,10 @@ public class NewVmActivity extends NextDeployActivity {
     }
 
     /**
-     * Reset form on the gui
+     *  Reset form on the gui
      */
-    public void resetForm() {
+    public void resetForm()
+    {
         //reset all form values
         projectId = null ;
         flavorId = null ;
@@ -337,18 +357,20 @@ class ProjectOnItemSelectedListener extends Activity implements AdapterView.OnIt
     private NewVmActivity cur = null ;
     private JSONArray projects ;
 
-    public ProjectOnItemSelectedListener(NewVmActivity cur, JSONArray projects) {
+    public ProjectOnItemSelectedListener(NewVmActivity cur, JSONArray projects)
+    {
         this.cur = cur ;
         this.projects = projects ;
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)  {
-        JSONArray users = null, flavors = null, branchs = null ;
-        String name = "", enabled = "", projectSelected, os = "" ;
-        JSONObject jrow = null ;
-        Button submit = (Button) cur.findViewById(R.id.button_submit) ;
-        Spinner spinner = null ;
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
+    {
+        JSONArray users = null, flavors = null, branchs = null, os = null;
+        String name = "", enabled = "", projectSelected;
+        JSONObject jrow = null;
+        Button submit = (Button) cur.findViewById(R.id.button_submit);
+        Spinner spinner = null;
 
         cur.resetForm();
 
@@ -364,7 +386,7 @@ class ProjectOnItemSelectedListener extends Activity implements AdapterView.OnIt
                 users = jrow.getJSONArray("users") ;
                 flavors = jrow.getJSONArray("vmsizes") ;
                 branchs = jrow.getJSONArray("branches") ;
-                os = jrow.getString("systemimagetype") ;
+                os = jrow.getJSONArray("systemimages") ;
                 cur.setProjectId(jrow.getString("id")) ;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -374,7 +396,7 @@ class ProjectOnItemSelectedListener extends Activity implements AdapterView.OnIt
                 users = null ;
                 flavors = null ;
                 branchs = null ;
-                os = "" ;
+                os = null;
                 cur.setProjectId(null) ;
                 continue ;
             }
@@ -388,9 +410,7 @@ class ProjectOnItemSelectedListener extends Activity implements AdapterView.OnIt
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> arg0) {
-
-    }
+    public void onNothingSelected(AdapterView<?> arg0) { }
 
 }
 
@@ -399,13 +419,15 @@ class BranchOnItemSelectedListener extends Activity implements AdapterView.OnIte
     private NewVmActivity cur = null ;
     private JSONArray branchs ;
 
-    public BranchOnItemSelectedListener(NewVmActivity cur) {
+    public BranchOnItemSelectedListener(NewVmActivity cur)
+    {
         this.cur = cur ;
         this.branchs = branchs ;
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)  {
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
+    {
         Spinner spinner = null ;
         String branchSelected = "" ;
 
@@ -422,8 +444,5 @@ class BranchOnItemSelectedListener extends Activity implements AdapterView.OnIte
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> arg0) {
-
-    }
-
+    public void onNothingSelected(AdapterView<?> arg0) { }
 }

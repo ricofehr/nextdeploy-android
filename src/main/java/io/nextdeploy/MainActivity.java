@@ -7,13 +7,14 @@ import android.widget.TextView;
 
 
 /**
- * Main activity, globla entries for the app
- * @author Eric Fehr (ricofehr@nextdeploy.io, @github: ricofehr)
+ *  Main activity, globla entries for the app
+ *  @author Eric Fehr (ricofehr@nextdeploy.io, github: ricofehr)
  */
 public class MainActivity extends NextDeployActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -21,30 +22,51 @@ public class MainActivity extends NextDeployActivity {
         t.setText("Welcome " + NextDeployApi.EMAIL);
     }
 
-    /** Called when the user clicks the Vm button */
-    public void vmList(View view) {
+    /**
+     *  Called when the user clicks the Vm button
+     *  @param view The current Android View
+     */
+    public void vmList(View view)
+    {
         startActivity(new Intent(getApplicationContext(), VmActivity.class));
     }
 
-    /** Called when the user clicks the NewVm button */
-    public void vmNew(View view) {
+    /**
+     *  Called when the user clicks the NewVm button
+     *  @param view The current Android View
+     */
+    public void vmNew(View view)
+    {
         startActivity(new Intent(getApplicationContext(), NewVmActivity.class));
     }
 
-    /** Called when the user clicks the project button */
-    public void projectList(View view) {
+    /**
+     *  Called when the user clicks the project button
+     *  @param view The current Android View
+     */
+    public void projectList(View view)
+    {
         startActivity(new Intent(getApplicationContext(), ProjectActivity.class));
     }
 
-    /** Called when the user clicks the project button */
-    public void userList(View view) {
+    /**
+     *  Called when the user clicks the user button
+     *  @param view The current Android View
+     */
+    public void userList(View view)
+    {
         startActivity(new Intent(getApplicationContext(), UserActivity.class));
     }
 
-    /** Called when the user clicks the project button */
-    public void logout(View view) {
-        NextDeployApi.EMAIL = null ;
-        NextDeployApi.API_TOKEN = null ;
+    /**
+     *  Called when the user clicks the logout button
+     *  @param view The current Android View
+     */
+    public void logout(View view)
+    {
+        NextDeployApi.EMAIL = null;
+        NextDeployApi.API_TOKEN = null;
+
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
     }
 }

@@ -11,14 +11,12 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,23 +28,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
-import org.apache.http.HttpVersion;
-import org.apache.http.client.params.ClientPNames;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.params.CoreProtocolPNames;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * A login screen that offers login via email/password.
- * @author Eric Fehr (ricofehr@nextdeploy.io, @github: ricofehr)
+ *  A login screen that offers login via email/password.
+ *  @author Eric Fehr (ricofehr@nextdeploy.io, github: ricofehr)
  */
 public class LoginActivity extends NextDeployActivity implements LoaderCallbacks<Cursor> {
 
@@ -59,16 +47,20 @@ public class LoginActivity extends NextDeployActivity implements LoaderCallbacks
 
 
     /**
-     * Initialize the activity
+     *  Initialize the activity
      *
-     * @param savedInstanceState
+     *  @param savedInstanceState
      */
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         fillForm();
     }
 
+    /**
+     *  Resume Activity Trigger
+     */
     @Override
     protected void onResume()
     {
@@ -77,7 +69,11 @@ public class LoginActivity extends NextDeployActivity implements LoaderCallbacks
         fillForm();
     }
 
-    public void fillForm() {
+    /**
+     *  Prepare the login form with settings value recorded
+     */
+    public void fillForm()
+    {
         /** ensure that settings is on default value on the first loading */
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -123,11 +119,12 @@ public class LoginActivity extends NextDeployActivity implements LoaderCallbacks
 
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     *  Attempts to sign in or register the account specified by the login form.
+     *  If there are form errors (invalid email, missing fields, etc.), the
+     *  errors are presented and no actual login attempt is made.
      */
-    public void attemptLogin() {
+    public void attemptLogin()
+    {
 
         // Reset errors.
         mEmailView.setError(null);
@@ -165,37 +162,41 @@ public class LoginActivity extends NextDeployActivity implements LoaderCallbacks
             focusView.requestFocus();
         } else {
             showProgress(true);
-            NextDeployApi.signin(getApplicationContext(), email, password, this) ;
+            NextDeployApi.signin(getApplicationContext(), email, password, this);
         }
     }
 
     /**
-     * Handler from authentification process
+     *  Handler from authentification process
      *
-     * @param lastlog log to dispaly on the device
+     *  @param lastlog log to dispaly on the device
      */
-    public void signinHandler(String lastlog) {
+    public void signinHandler(String lastlog)
+    {
         Toast.makeText(getApplicationContext(), lastlog, Toast.LENGTH_LONG).show();
-        if (NextDeployApi.API_TOKEN != null && NextDeployApi.API_TOKEN != "") {
+        if (NextDeployApi.API_TOKEN != null && !NextDeployApi.API_TOKEN.equals("")) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         } else {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         }
     }
 
-    private boolean isEmailValid(String email) {
+    private boolean isEmailValid(String email)
+    {
         return email.contains("@");
     }
 
-    private boolean isPasswordValid(String password) {
+    private boolean isPasswordValid(String password)
+    {
         return password.length() > 4;
     }
 
     /**
-     * Shows the progress UI and hides the login form.
+     *  Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public void showProgress(final boolean show) {
+    public void showProgress(final boolean show)
+    {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
@@ -228,13 +229,14 @@ public class LoginActivity extends NextDeployActivity implements LoaderCallbacks
     }
 
     /**
-     * Prepare autocomplete for emails
+     *  Prepare autocomplete for emails
      *
-     * @param i
-     * @param bundle
-     * @return
+     *  @param i
+     *  @param bundle
+     *  @return
      */
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle)
+    {
         return new CursorLoader(this,
                 // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
@@ -251,7 +253,8 @@ public class LoginActivity extends NextDeployActivity implements LoaderCallbacks
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor)
+    {
         List<String> emails = new ArrayList<String>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -263,9 +266,7 @@ public class LoginActivity extends NextDeployActivity implements LoaderCallbacks
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
+    public void onLoaderReset(Loader<Cursor> cursorLoader) { }
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -278,11 +279,12 @@ public class LoginActivity extends NextDeployActivity implements LoaderCallbacks
     }
 
     /**
-     * Propose som emails from device list
+     *  Propose som emails from device list
      *
-     * @param emailAddressCollection
+     *  @param emailAddressCollection
      */
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+    private void addEmailsToAutoComplete(List<String> emailAddressCollection)
+    {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(LoginActivity.this,
@@ -290,7 +292,6 @@ public class LoginActivity extends NextDeployActivity implements LoaderCallbacks
 
         mEmailView.setAdapter(adapter);
     }
-
 }
 
 

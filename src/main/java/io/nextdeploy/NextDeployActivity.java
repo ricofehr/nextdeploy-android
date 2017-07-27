@@ -9,28 +9,49 @@ import android.widget.TextView;
 import org.json.JSONArray;
 
 /**
- * Parent of other activities
- * @author Eric Fehr (ricofehr@nextdeploy.io, @github: ricofehr)
+ *  Parent of other activities
+ *  @author Eric Fehr (ricofehr@nextdeploy.io, github: ricofehr)
  */
 public abstract class NextDeployActivity extends ActionBarActivity {
-    protected void listHandler(JSONArray results, String last_log) {
+    /**
+     *  Handler callback from api request for items list
+     *  @param results
+     *  @param lastLog
+     */
+    protected void listHandler(JSONArray results, String lastLog) { }
 
+    /**
+     *  Handler callback from api request for value setted
+     *  @param rId
+     *  @param value
+     */
+    protected void valueHandler(int rId, String value)
+    {
+        TextView txt = (TextView) this.findViewById(rId);
+        txt.setText(value);
     }
 
-    protected void valueHandler(int r_id, String value) {
-        TextView txt = (TextView) this.findViewById(r_id) ;
-        txt.setText(value) ;
-    }
-
+    /**
+     *  Trigger on menu creation
+     *  @param menu
+     *  @return Boolean
+     */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
+    /**
+     *  Trigger when an item is selected into the menu
+     *  @param item
+     *  @return
+     */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.

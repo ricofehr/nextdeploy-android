@@ -1,14 +1,15 @@
 package io.nextdeploy;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import org.apache.http.Header;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.entity.StringEntity;
@@ -18,15 +19,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Library for request with nextdeploy api
- * @author Eric Fehr (ricofehr@nextdeploy.io, @github: ricofehr)
+ *  Library for request with nextdeploy api
+ *  @author Eric Fehr (ricofehr@nextdeploy.io, github: ricofehr)
  */
 public class NextDeployApi {
     private static AsyncHttpClient aSyncClient;
     private static String USER_AGENT = "Android NextDeploy UA";
 
     public static String API_TOKEN = "";
-    public static String EMAIL = "" ;
+    public static String EMAIL = "";
 
     /**
      * Init asynchttpclient object for Rest request.
@@ -34,13 +35,14 @@ public class NextDeployApi {
      *
      * @return  if true, request is ready to perform
      */
-    private static Boolean init() {
+    private static Boolean init()
+    {
         // setup asynchronous client
         aSyncClient = new AsyncHttpClient();
         aSyncClient.setUserAgent(USER_AGENT);
         aSyncClient.addHeader("Accept", "application/json");
         aSyncClient.addHeader("Content-Type", "application/json");
-        if (API_TOKEN != "") {
+        if (!API_TOKEN.equals("")) {
             aSyncClient.addHeader("Authorization", String.format("Token token=%s", API_TOKEN));
         }
         aSyncClient.getHttpClient().getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, false);
@@ -48,7 +50,7 @@ public class NextDeployApi {
         aSyncClient.getHttpClient().getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
         aSyncClient.setTimeout(60000);
 
-        return true ;
+        return true;
     }
 
     /**
@@ -60,27 +62,31 @@ public class NextDeployApi {
      * @param cur       the android activity to forward the callback after processing
      * @return          false if exception occurs
      */
-    public static Boolean signin(Context context, String email, String password, LoginActivity cur) {
+    public static Boolean signin(Context context, String email, String password, LoginActivity cur)
+    {
         JSONObject jsonParams = new JSONObject();
-        StringEntity entity = null ;
-        AsyncHttpResponseHandler responseHandler = null ;
+        JSONObject jsonRoot = new JSONObject();
+        StringEntity entity;
+        AsyncHttpResponseHandler responseHandler;
+        String absoluteUrl = getAbsoluteUrl(context, "/api/v1/users/sign_in");
 
-        if(!init()) {
-            return false ;
+        if (!init()) {
+            return false;
         }
 
         try {
             jsonParams.put("email", email);
             jsonParams.put("password", password);
-            entity = new StringEntity(jsonParams.toString());
+            jsonRoot.put("user", jsonParams);
+            entity = new StringEntity(jsonRoot.toString());
         } catch (Exception e) {
-            return false ;
+            return false;
         }
 
-        responseHandler = new LoginHandler(cur) ;
-        aSyncClient.post(context, getAbsoluteUrl(context, "/api/v1/users/sign_in"), entity, "application/json", responseHandler) ;
+        responseHandler = new LoginHandler(cur);
+        aSyncClient.post(context, absoluteUrl, entity, "application/json", responseHandler);
 
-        return true ;
+        return true;
     }
 
 
@@ -91,19 +97,21 @@ public class NextDeployApi {
      * @param cur   the android activity to forward the callback after processing
      * @return      false if exception occurs
      */
-    public static Boolean listProjects(Context context, NextDeployActivity cur) {
-        AsyncHttpResponseHandler responseHandler = null ;
+    public static Boolean listProjects(Context context, NextDeployActivity cur)
+    {
+        AsyncHttpResponseHandler responseHandler;
+        String absoluteUrl = getAbsoluteUrl(context, "/api/v1/projects");
 
-        if(!init()) {
-            Log.e("failure", "init false") ;
-            return false ;
+        if (!init()) {
+            Log.e("failure", "init false");
+            return false;
         }
 
-        responseHandler = new listContentHandler(cur, "projects") ;
-        Log.e("nextdeployapi", "get /api/v1/projects") ;
-        aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/projects"), responseHandler) ;
+        responseHandler = new listContentHandler(cur, "projects");
+        //Log.e("nextdeployapi", "get /api/v1/projects");
+        aSyncClient.get(context, absoluteUrl, responseHandler);
 
-        return true ;
+        return true;
     }
 
     /**
@@ -113,18 +121,20 @@ public class NextDeployApi {
      * @param cur   the android activity to forward the callback after processing
      * @return      false if exception occurs
      */
-    public static Boolean listVms(Context context, NextDeployActivity cur) {
-        AsyncHttpResponseHandler responseHandler = null;
+    public static Boolean listVms(Context context, NextDeployActivity cur)
+    {
+        AsyncHttpResponseHandler responseHandler;
+        String absoluteUrl = getAbsoluteUrl(context, "/api/v1/vms");
 
-        if(!init()) {
+        if (!init()) {
             Log.e("failure", "init false");
             return false;
         }
 
         responseHandler = new listContentHandler(cur, "vms");
-        aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/vms"), responseHandler);
+        aSyncClient.get(context, absoluteUrl, responseHandler);
 
-        return true ;
+        return true;
     }
 
     /**
@@ -134,18 +144,20 @@ public class NextDeployApi {
      * @param cur   the android activity to forward the callback after processing
      * @return      false if exception occurs
      */
-    public static Boolean listUsers(Context context, NextDeployActivity cur) {
-        AsyncHttpResponseHandler responseHandler = null ;
+    public static Boolean listUsers(Context context, NextDeployActivity cur)
+    {
+        AsyncHttpResponseHandler responseHandler;
+        String absoluteUrl = getAbsoluteUrl(context, "/api/v1/users");
 
-        if(!init()) {
+        if (!init()) {
             Log.e("failure", "init false");
             return false;
         }
 
         responseHandler = new listContentHandler(cur, "users");
-        aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/users"), responseHandler);
+        aSyncClient.get(context, absoluteUrl, responseHandler);
 
-        return true ;
+        return true;
     }
 
     /**
@@ -160,30 +172,66 @@ public class NextDeployApi {
      * @param osId  systemimage parameter for the post request
      * @return  false if exception occurs
      */
-    public static Boolean createVm(Context context, NewVmActivity cur, String projectId, String flavorId, String userId, String commitId, String osId) {
-        JSONObject jsonParams = new JSONObject();
-        StringEntity entity = null;
-        AsyncHttpResponseHandler responseHandler = null;
-
-        if(!init()) {
+    public static Boolean createVm(final Context context, final NewVmActivity cur, final String projectId,
+                                   final String flavorId, final String userId, final String commitId, final String osId)
+    {
+        if (!init()) {
             Log.e("failure", "init false");
             return false;
         }
 
-        try {
-            jsonParams.put("project_id", projectId);
-            jsonParams.put("vmsize_id", flavorId);
-            jsonParams.put("user_id", userId);
-            jsonParams.put("systemimage_id", osId);
-            jsonParams.put("commit_id", commitId);
+        aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/projects/" + projectId), null, new JsonHttpResponseHandler() {
+        //mSyncClient.get(getAbsoluteUrl(context, "/api/v1/projects/" + projectId), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                JSONObject jsonParams = new JSONObject();
+                JSONObject jsonRoot = new JSONObject();
+                JSONObject projectJson;
+                JSONArray technos;
+                StringEntity entity;
+                AsyncHttpResponseHandler responseHandler;
+                String absoluteUrl = getAbsoluteUrl(context, "/api/v1/vms/short");
+                Log.e("okproject", response.toString());
 
-            entity = new StringEntity(jsonParams.toString());
-        } catch (Exception e) {
-            return false;
-        }
+                // success logic here
+                try {
+                    projectJson = new JSONObject(response.toString()).getJSONObject("project");
+                    technos = projectJson.getJSONArray("technos");
+                    jsonParams.put("topic", commitId.split("-")[1]);
+                    jsonParams.put("project_id", projectId);
+                    jsonParams.put("vmsize_id", flavorId);
+                    jsonParams.put("user_id", userId);
+                    jsonParams.put("systemimage_id", osId);
+                    jsonParams.put("technos", technos);
+                    jsonParams.put("is_auth", true);
+                    jsonParams.put("is_prod", false);
+                    jsonParams.put("is_cached", false);
+                    jsonParams.put("is_backup", false);
+                    jsonParams.put("is_ci", false);
+                    jsonParams.put("is_jenkins", false);
+                    jsonParams.put("is_ro", false);
+                    jsonParams.put("is_ht", false);
+                    jsonParams.put("layout", "fr");
+                    jsonParams.put("htlogin", projectJson.getString("login"));
+                    jsonParams.put("htpassword", projectJson.getString("password"));
+                    jsonParams.put("commit_id", commitId);
+                    jsonRoot.put("vm", jsonParams);
+                    Log.e("vmJson", jsonRoot.toString());
+                    entity = new StringEntity(jsonRoot.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return;
+                }
 
-        responseHandler = new createVmHandler(cur);
-        aSyncClient.post(context, getAbsoluteUrl(context, "/api/v1/vms"), entity, "application/json", responseHandler) ;
+                responseHandler = new createVmHandler(cur);
+                aSyncClient.post(context, absoluteUrl, entity, "application/json", responseHandler);
+            }
+            /*
+            public void onFailure(int statusCode, Header[] headers, Throwable e, JSONObject errorResponse) {
+                // handle failure here
+            }*/
+
+        });
 
         return true;
     }
@@ -199,363 +247,406 @@ public class NextDeployApi {
      * @param os the list of systemimages id associated with the project checked
      * @return      false if exception occurs
      */
-    public static Boolean newVmHandler(Context context, NewVmActivity cur, JSONArray flavors, JSONArray users, JSONArray branchs, String os) {
-        AsyncHttpResponseHandler responseHandler = null;
-        int i = 0 ;
+    public static Boolean newVmHandler(Context context, NewVmActivity cur, JSONArray flavors,
+                                       JSONArray users, JSONArray branchs, JSONArray os)
+    {
+        int i;
         String id = "";
+        String absoluteUrlFlavors;
+        String absoluteUrlUsers;
+        String absoluteUrlBranches;
+        String absoluteUrlSystemImages;
 
-        if(!init()) {
+        if (!init()) {
             Log.e("failure", "init false");
-            return false ;
+            return false;
         }
 
-        for(i=0; i<flavors.length(); i++) {
+        for(i = 0; i < flavors.length(); i++) {
             try {
                 id = flavors.getString(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/vmsizes/"+id), new SpinnerHandler(cur, "flavor"));
+            absoluteUrlFlavors = getAbsoluteUrl(context, "/api/v1/vmsizes/" + id);
+            aSyncClient.get(context, absoluteUrlFlavors, new SpinnerHandler(cur, "flavor"));
         }
 
-        for(i=0; i<users.length(); i++) {
+        for(i = 0; i < users.length(); i++) {
             try {
-                id = users.getString(i) ;
+                id = users.getString(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/users/"+id), new SpinnerHandler(cur, "user"));
+            absoluteUrlUsers = getAbsoluteUrl(context, "/api/v1/users/" + id);
+            aSyncClient.get(context, absoluteUrlUsers, new SpinnerHandler(cur, "user"));
         }
 
-        for(i=0; i<branchs.length(); i++) {
+        for(i = 0; i < branchs.length(); i++) {
             try {
                 id = branchs.getString(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/branches/"+id), new SpinnerHandler(cur, "branche"));
+            absoluteUrlBranches = getAbsoluteUrl(context, "/api/v1/branches/" + id);
+            aSyncClient.get(context, absoluteUrlBranches, new SpinnerHandler(cur, "branche"));
         }
 
-        aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/systemimages/type/"+os), new SpinnerHandler(cur, "systemimage"));
+        for(i = 0; i < os.length(); i++) {
+            try {
+                id = os.getString(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            absoluteUrlSystemImages = getAbsoluteUrl(context, "/api/v1/systemimages/" + id);
+            aSyncClient.get(context, absoluteUrlSystemImages, new SpinnerHandler(cur, "systemimage"));
+        }
 
         return true;
     }
 
     /**
-     * Fill commits spinner for newvm form
+     *  Fill commits spinner for newvm form
      *
-     * @param context   the android application context
-     * @param cur   the android activity to forward the callback after processing
-     * @return      false if exception occurs
+     *  @param context   the android application context
+     *  @param cur   the android activity to forward the callback after processing
+     *  @return      false if exception occurs
      */
-    public static Boolean newVmHandler2(Context context, NewVmActivity cur, String branch) {
-        AsyncHttpResponseHandler responseHandler = null;
+    public static Boolean newVmHandler2(Context context, NewVmActivity cur, String branch)
+    {
+        String absoluteUrl = getAbsoluteUrl(context, "/api/v1/branches/" + branch);
 
-        if(!init()) {
+        if (!init()) {
             Log.e("failure", "init false");
             return false;
         }
 
-        aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/branches/"+branch), new SpinnerHandler(cur, "commit"));
+        aSyncClient.get(context, absoluteUrl, new SpinnerHandler(cur, "commit"));
 
         return true;
     }
 
     /**
-     * Return details about one project
+     *  Return details about one project
      *
-     * @param context   the android application context
-     * @param project_id    id for the project
-     * @param r_id  id for the label on the android view
-     * @param cur   the android activity to forward the callback after processing
-     * @return  false if exception occurs
+     *  @param context   the android application context
+     *  @param projectId    id for the project
+     *  @param rId  id for the label on the android view
+     *  @param cur   the android activity to forward the callback after processing
+     *  @return  false if exception occurs
      */
-    public static Boolean getProject(Context context, String project_id, int r_id, NextDeployActivity cur) {
-        AsyncHttpResponseHandler responseHandler = null;
+    public static Boolean getProject(Context context, String projectId, int rId, NextDeployActivity cur)
+    {
+        AsyncHttpResponseHandler responseHandler;
+        String absoluteUrl = getAbsoluteUrl(context, "/api/v1/projects/" + projectId);
 
-        if(!init()) {
+        if (!init()) {
             Log.e("failure", "init false");
             return false;
         }
 
-        responseHandler = new updateViewHandler(r_id, cur, "project");
-        aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/projects/" + project_id), responseHandler);
+        responseHandler = new updateViewHandler(rId, cur, "project");
+        aSyncClient.get(context, absoluteUrl, responseHandler);
 
         return true;
     }
 
     /**
-     * Return details about one user
+     *  Return details about one user
      *
-     * @param context   the android application context
-     * @param user_id    id for the user
-     * @param r_id  id for the label on the android view
-     * @param cur   the android activity to forward the callback after processing
-     * @return  false if exception occurs
+     *  @param context   the android application context
+     *  @param userId    id for the user
+     *  @param rId  id for the label on the android view
+     *  @param cur   the android activity to forward the callback after processing
+     *  @return  false if exception occurs
      */
-    public static Boolean getUser(Context context, String user_id, int r_id, NextDeployActivity cur) {
-        AsyncHttpResponseHandler responseHandler = null;
+    public static Boolean getUser(Context context, String userId, int rId, NextDeployActivity cur)
+    {
+        AsyncHttpResponseHandler responseHandler;
+        String absoluteUrl = getAbsoluteUrl(context, "/api/v1/users/" + userId);
 
-        if(!init()) {
+        if (!init()) {
             Log.e("failure", "init false");
             return false;
         }
 
-        Log.e("getuser", getAbsoluteUrl(context, "/api/v1/users/" + user_id)) ;
-
-        responseHandler = new updateViewHandler(r_id, cur, "user");
-        aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/users/" + user_id), responseHandler);
+        responseHandler = new updateViewHandler(rId, cur, "user");
+        aSyncClient.get(context, absoluteUrl, responseHandler);
 
         return true;
     }
 
     /**
-     * Return details about one system
+     *  Return details about one system
      *
-     * @param context   the android application context
-     * @param system_id    id for the system
-     * @param r_id  id for the label on the android view
-     * @param cur   the android activity to forward the callback after processing
-     * @return  false if exception occurs
+     *  @param context   the android application context
+     *  @param systemId    id for the system
+     *  @param rId  id for the label on the android view
+     *  @param cur   the android activity to forward the callback after processing
+     *  @return  false if exception occurs
      */
-    public static Boolean getSystem(Context context, String system_id, int r_id, NextDeployActivity cur) {
-        AsyncHttpResponseHandler responseHandler = null;
+    public static Boolean getSystem(Context context, String systemId, int rId, NextDeployActivity cur)
+    {
+        AsyncHttpResponseHandler responseHandler;
+        String absoluteUrl = getAbsoluteUrl(context, "/api/v1/systemimages/" + systemId);
 
-        if(!init()) {
+        if (!init()) {
             Log.e("failure", "init false");
             return false;
         }
 
-        responseHandler = new updateViewHandler(r_id, cur, "systemimage");
-        aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/systemimages/" + system_id), responseHandler);
+        responseHandler = new updateViewHandler(rId, cur, "systemimage");
+        aSyncClient.get(context, absoluteUrl, responseHandler);
 
         return true;
     }
 
     /**
-     * Return details about one group
+     *  Return details about one group
      *
-     * @param context   the android application context
-     * @param group_id    id for the group
-     * @param r_id  id for the label on the android view
-     * @param cur   the android activity to forward the callback after processing
-     * @return  false if exception occurs
+     *  @param context   the android application context
+     *  @param groupId    id for the group
+     *  @param rId  id for the label on the android view
+     *  @param cur   the android activity to forward the callback after processing
+     *  @return  false if exception occurs
      */
-    public static Boolean getGroup(Context context, String group_id, int r_id, NextDeployActivity cur) {
-        AsyncHttpResponseHandler responseHandler = null;
+    public static Boolean getGroup(Context context, String groupId, int rId, NextDeployActivity cur)
+    {
+        AsyncHttpResponseHandler responseHandler;
+        String absoluteUrl = getAbsoluteUrl(context, "/api/v1/groups/" + groupId);
 
-        if(!init()) {
+        if (!init()) {
             Log.e("failure", "init false");
             return false;
         }
 
-        responseHandler = new updateViewHandler(r_id, cur, "group");
-        aSyncClient.get(context, getAbsoluteUrl(context, "/api/v1/groups/" + group_id), responseHandler);
+        responseHandler = new updateViewHandler(rId, cur, "group");
+        aSyncClient.get(context, absoluteUrl, responseHandler);
 
         return true;
     }
 
     /**
-     * Concat preference endpoint with path of rest request
+     *  Concat preference endpoint with path of rest request
      *
-     * @param context activity context
-     * @param relativeUrl   path for the rest request
-     * @return  absolute path for rest request
+     *  @param context activity context
+     *  @param relativeUrl   path for the rest request
+     *  @return  absolute path for rest request
      */
-    private static String getAbsoluteUrl(Context context, String relativeUrl) {
+    private static String getAbsoluteUrl(Context context, String relativeUrl)
+    {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         return "https://" + sharedPref.getString("endpoint", "") + relativeUrl;
     }
 }
 
 /**
- * Handler for update label on android view
+ *  Handler for update label on android view
  */
 class updateViewHandler extends AsyncHttpResponseHandler {
-    private int r_id;
+    private int rId;
     private NextDeployActivity cur;
     private String match;
 
     /**
-     * Constructor, init shared variables
+     *  Constructor, init shared variables
      *
-     * @param r_id  id of the label targetted on the android view
-     * @param cur   android activity object for callback handler
+     *  @param rId  id of the label targetted on the android view
+     *  @param cur   android activity object for callback handler
+     *  @param match
      */
-    public updateViewHandler( int r_id, NextDeployActivity cur, String match ) {
-        this.r_id = r_id;
+    public updateViewHandler(int rId, NextDeployActivity cur, String match)
+    {
+        this.rId = rId;
         this.cur = cur;
         this.match = match;
     }
 
     /**
-     * Success function for rest request
+     *  Success function for rest request
      *
-     * @param response  response from nextdeploy request
+     *  @param response  response from nextdeploy request
      */
-    public void onSuccess(String response) {
+    public void onSuccess(String response)
+    {
         String ret = "";
 
         try {
             JSONObject jsonObject = new JSONObject(response);
             JSONObject myResponse = jsonObject.getJSONObject(match);
-            if (match.compareTo("user") == 0) ret = myResponse.getString("email");
-            else if (match.compareTo("flavor") == 0) ret = myResponse.getString("title");
-            else ret = myResponse.getString("name");
+
+            if (match.compareTo("user") == 0) {
+                ret = myResponse.getString("email");
+            }
+            else if (match.compareTo("flavor") == 0) {
+                ret = myResponse.getString("title");
+            }
+            else {
+                ret = myResponse.getString("name");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        this.cur.valueHandler(this.r_id, ret);
+        this.cur.valueHandler(this.rId, ret);
     }
 
     /**
-     * Failure function. Log error. Raise exception ?
+     *  Failure function. Log error. Raise exception ?
      *
-     * @param statusCode    http error code
-     * @param error     error object
-     * @param content   error message
+     *  @param statusCode    http error code
+     *  @param error     error object
+     *  @param content   error message
      */
-    public void onFailure(int statusCode, Throwable error, String content) {
+    public void onFailure(int statusCode, Throwable error, String content)
+    {
         Log.e("onFailure", error.getMessage());
     }
 }
 
 /**
- * Handler for list datas from nextdeploy rest request
+ *  Handler for list datas from nextdeploy rest request
  */
 class listContentHandler extends AsyncHttpResponseHandler {
     private NextDeployActivity cur;
     private String match = "";
 
     /**
-     * Constructor, init shared variables
+     *  Constructor, init shared variables
      *
-     * @param match  filter for the content
-     * @param cur   android activity object for callback handler
+     *  @param match  filter for the content
+     *  @param cur   android activity object for callback handler
      */
-    public listContentHandler( NextDeployActivity cur, String match ) {
+    public listContentHandler(NextDeployActivity cur, String match)
+    {
         this.cur = cur;
         this.match = match;
     }
 
     /**
-     * Success function for rest request
+     *  Success function for rest request
      *
-     * @param response  response from nextdeploy request
+     *  @param response  response from nextdeploy request
      */
-    public void onSuccess(String response) {
-        Log.e("onSuccess", response);
-        String last_log = null;
+    public void onSuccess(String response)
+    {
+        //Log.e("onSuccess", response);
+        String lastLog = null;
         JSONArray results = null;
 
         try {
             JSONObject jsonObject = new JSONObject(response);
             results = jsonObject.getJSONArray(match);
         } catch (Exception e) {
-            last_log = "Error Occured [Server's JSON response might be invalid]!" ;
+            lastLog = "Error Occured [Server's JSON response might be invalid]!";
             e.printStackTrace();
         }
 
-        cur.listHandler(results, last_log);
+        cur.listHandler(results, lastLog);
     }
 
     /**
-     * Failure function. Log error. Callback into the activity for displaying alert.
+     *  Failure function. Log error. Callback into the activity for displaying alert.
      *
-     * @param statusCode    http error code
-     * @param error     error object
-     * @param content   error message
+     *  @param statusCode    http error code
+     *  @param error     error object
+     *  @param content   error message
      */
     public void onFailure(int statusCode, Throwable error, String content) {
         Log.e("onFailure", error.getMessage());
-        String last_log = null;
+        String lastLog;
 
         // When Http response code is '404'
-        if(statusCode == 404){
-            last_log = "Requested resource not found";
+        if (statusCode == 404){
+            lastLog = "Requested resource not found";
         }
         // When Http response code is '500'
-        else if(statusCode == 500){
-            last_log = "Something went wrong at server end";
+        else if (statusCode == 500){
+            lastLog = "Something went wrong at server end";
         }
         // When Http response code other than 404, 500
-        else{
-            last_log = "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]";
+        else {
+            lastLog = "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]";
         }
 
-        cur.listHandler(null, last_log);
+        cur.listHandler(null, lastLog);
     }
 }
 
 /**
- * Handler for flavor datas from nextdeploy rest request
+ *  Handler for flavor datas from nextdeploy rest request
  */
 class SpinnerHandler extends AsyncHttpResponseHandler {
     private NewVmActivity cur;
     private String match;
 
     /**
-     * Constructor, init shared variables
+     *  Constructor, init shared variables
      *
-     * @param cur   android activity object for callback handler
+     *  @param cur   android activity object for callback handler
      */
-    public SpinnerHandler(NewVmActivity cur, String match) {
+    public SpinnerHandler(NewVmActivity cur, String match)
+    {
         this.cur = cur;
         this.match = match;
     }
 
     /**
-     * Success function for rest request
+     *  Success function for rest request
      *
-     * @param response  response from nextdeploy request
+     *  @param response  response from nextdeploy request
      */
-    public void onSuccess(String response) {
+    public void onSuccess(String response)
+    {
         cur.spinnerHandler(response, match);
     }
 
     /**
-     * Failure function. Log error. Callback into the activity for displaying alert.
+     *  Failure function. Log error. Callback into the activity for displaying alert.
      *
-     * @param statusCode    http error code
-     * @param error     error object
-     * @param content   error message
+     *  @param statusCode    http error code
+     *  @param error     error object
+     *  @param content   error message
      */
-    public void onFailure(int statusCode, Throwable error, String content) {
+    public void onFailure(int statusCode, Throwable error, String content)
+    {
         Log.e("onFailure", error.getMessage() + match);
-        String last_log = null;
+        String lastLog = null;
 
         // When Http response code is '404'
-        if(statusCode == 404){
-            last_log = "Requested resource not found";
+        if (statusCode == 404) {
+            lastLog = "Requested resource not found";
         }
         // When Http response code is '500'
-        else if(statusCode == 500){
-            last_log = "Something went wrong at server end";
+        else if (statusCode == 500) {
+            lastLog = "Something went wrong at server end";
         }
         // When Http response code other than 404, 500
-        else{
-            last_log = "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]";
+        else {
+            lastLog = "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]";
         }
 
-        cur.spinnerHandler(null, match);
+        cur.spinnerHandler(null, lastLog);
     }
 }
 
 /**
- * Handler for authentification request
+ *  Handler for authentification request
  */
 class LoginHandler extends AsyncHttpResponseHandler {
     private LoginActivity cur;
 
-    public LoginHandler(LoginActivity cur) {
+    public LoginHandler(LoginActivity cur)
+    {
         this.cur = cur;
     }
 
-    public void onSuccess(String response) {
+    public void onSuccess(String response)
+    {
         try {
             JSONObject jsonObject = new JSONObject(response);
             JSONObject myResponse = jsonObject.getJSONObject("user");
@@ -574,21 +665,23 @@ class LoginHandler extends AsyncHttpResponseHandler {
         cur.signinHandler("Authentification is ok");
     }
 
-    public void onFailure(int statusCode, Throwable error, String content) {
+    public void onFailure(int statusCode, Throwable error, String content)
+    {
         Log.e("onFailure", error.getMessage());
         String lastLog = "";
         NextDeployApi.API_TOKEN = null;
         NextDeployApi.EMAIL = null;
+
         // When Http response code is '404'
-        if(statusCode == 404){
+        if (statusCode == 404) {
             lastLog = "Requested resource not found";
         }
         // When Http response code is '500'
-        else if(statusCode == 500){
+        else if (statusCode == 500) {
             lastLog = "Something went wrong at server end";
         }
         // When Http response code other than 404, 500
-        else{
+        else {
             lastLog = "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet or remote server is not up and running]";
         }
 
@@ -599,11 +692,13 @@ class LoginHandler extends AsyncHttpResponseHandler {
 class createVmHandler extends AsyncHttpResponseHandler {
     private NewVmActivity cur;
 
-    public createVmHandler(NewVmActivity cur) {
+    public createVmHandler(NewVmActivity cur)
+    {
         this.cur = cur;
     }
 
-    public void onSuccess(String response) {
+    public void onSuccess(String response)
+    {
         try {
             cur.createVmHandler(true);
         } catch (Exception e) {
@@ -612,7 +707,8 @@ class createVmHandler extends AsyncHttpResponseHandler {
 
     }
 
-    public void onFailure(int statusCode, Throwable error, String content) {
+    public void onFailure(int statusCode, Throwable error, String content)
+    {
         cur.createVmHandler(false);
     }
 }
